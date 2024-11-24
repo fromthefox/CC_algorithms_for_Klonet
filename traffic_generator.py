@@ -2,7 +2,7 @@ class traffic_generator():
     """
     定义简化版的traffic_generator来验证CC Demo
     """
-    def __init__(self, src_node_id, dst_node_id, data_size):
+    def __init__(self, user_id, proj_id, src_node_id, dst_node_id, data_size, run_time, CONFIG):
         """
         这里的src_node_id <-> dst_node_id之间的链路带宽和流量分布应该是从用户给出的CONFIG文件中获取, 但是为了演示Demo这里直接给出
         """
