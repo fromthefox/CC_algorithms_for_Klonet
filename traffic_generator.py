@@ -22,8 +22,9 @@ class traffic_generator():
         }
         response = requests.post(self.url, json=data)
         response_json = response.json()
-        print(response_json)
-        return response_json
+        # print(response_json)
+        time = response_json["simple_info"]["time"]
+        return time
 
 
 traffic_generator = traffic_generator("yhbian", "traffic_generator_test", "h1", "h2", "10M")
