@@ -1,5 +1,4 @@
 import requests
-import json
 
 class traffic_generator():
     def __init__(self, user_id, topo_id, src_node, dst_node, data_size, CONFIG = {}, url = 'http://192.168.1.33:25888/master/traffic_gen/'):
@@ -23,4 +22,9 @@ class traffic_generator():
         }
         response = requests.post(self.url, json=data)
         response_json = response.json()
+        print(response_json)
         return response_json
+
+
+traffic_generator = traffic_generator("yhbian", "traffic_generator_test", "h1", "h2", "10M")
+traffic_generator.generate()
