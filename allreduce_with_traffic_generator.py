@@ -1,4 +1,5 @@
-from traffic_generator import traffic_generator
+from traffic_generator import traffic_generator_init
+import time
 
 weight_dtype = "fp16"
 param_size_list = {
@@ -21,6 +22,7 @@ grad_size = model_param_num * param_size / (1024**3) # GB
 circle_topo = ["h1", "h2", "h3", "h4", "h5"]
 NODES_NUM = len(circle_topo)
 segment_grad_size = grad_size / NODES_NUM #单个梯度块的size
+segment_grad_size = "10M"
 
 MAX_STEPS = 2 * (NODES_NUM - 1)
 allreduce_sum_time = 0
@@ -33,7 +35,7 @@ for step in range(MAX_STEPS):
         else:
             src_node = node
             dst_node = circle_topo[node_index+1]
-        traffic_generator = traffic_generator("yhbian", "traffic_generator_test",src_node, dst_node, segment_grad_size)
+        traffic_generator = traffic_generator_init("yhbian", "traffic_generator_test",src_node, dst_node, segment_grad_size)
         send_time = traffic_generator.generate()
         if send_time > max_time:
             max_time = send_time
