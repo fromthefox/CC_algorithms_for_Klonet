@@ -11,7 +11,7 @@ class traffic_generator():
         self.data_size = data_size
         self.CONFIG = CONFIG
         self.url = url
-        self.force = 1
+        self.force = True
 
     def generate(self):
         data = {
@@ -20,8 +20,9 @@ class traffic_generator():
             "src_node": self.src_node,
             "dst_node": self.dst_node,
             "data_size": self.data_size,
-            "force": self.force,
-            "CONFIG": self.CONFIG
+            "CONFIG": {
+                # "force": self.force
+            }
         }
         response = requests.post(self.url, json=data)
         response_json = response.json()
@@ -29,5 +30,5 @@ class traffic_generator():
         # time = response_json["simple_info"]["time"]
         # return time
     
-traffic_generator = traffic_generator("yhbian", "traffic_generator_test", "h1", "h2", "1G")
+traffic_generator = traffic_generator("yhbian", "traffic_generator_test", "h1", "h2", "10M")
 traffic_generator.generate()

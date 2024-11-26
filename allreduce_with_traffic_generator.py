@@ -1,9 +1,22 @@
 from traffic_generator import traffic_generator
 
 weight_dtype = "fp16"
-param_size = 2 if weight_dtype == "fp16" else 4
-model_param_num = 8029995008
-grad_size = model_param_num * param_size / (1024 * 1024 * 1024) # GB
+param_size_list = {
+    "fp32": 4,
+    "fp16": 2,
+    "int8": 1,
+    "int4": 0.5
+}
+model_param_list = {
+    "Llama-3-8B": 8029995008,
+    "GPT-2-small": 124439808,
+    "GPT-2-medium": 355000000,
+    "GPT-2-large": 774000000,
+    "GPT-2-xl": 1591101440
+}
+model_param_num = model_param_list["Llama-3-8B"]
+param_size = param_size_list["fp16"]
+grad_size = model_param_num * param_size / (1024**3) # GB
 
 circle_topo = ["h1", "h2", "h3", "h4", "h5"]
 NODES_NUM = len(circle_topo)
