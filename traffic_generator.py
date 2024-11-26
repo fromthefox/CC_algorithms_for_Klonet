@@ -26,24 +26,8 @@ class traffic_generator_init():
         }
         response = requests.post(self.url, json=data)
         response_json = response.json()
-        print(response_json)
+        # print(response_json)
         time = response_json["simple_info"]["time"]
         return time
-    
-# traffic_generator = traffic_generator_init("yhbian", "traffic_generator_test", "h5", "h1", "1G")
-# traffic_generator.generate()
-
-
-# data = {
-#             "user": "yhbian",
-#             "topo": "traffic_generator_test",
-#             "src_node": "h5",
-#             "dst_node": "h1",
-#             "data_size": "1G",
-#             "CONFIG": {
-#                 "force": True
-#             }
-#         }
-# response = requests.post("http://kb310server.x3322.net:10441/master/traffic_gen/", json=data)
-# response_json = response.json()
-# print(response_json)
+# a = traffic_generator_init("yhbian", "traffic_generator_test", "h1", "h2", "1G")
+# print(a.generate())
