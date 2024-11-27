@@ -1,2 +1,2 @@
-, "traffic_generator_test", "h5", "h1", "1G")
-traffic_generator.generate()
+c_generator_test", "h1", "h2", "1G")
+print(a.generate())

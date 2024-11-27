@@ -33,7 +33,7 @@ class broadcast_emulator():
                     _ = son_nodes_list.pop(index)
                     temp_father_nodes_list.append(son_node)
                     break
-            print(f"step:{step}, exec_time:{max_time}")
+            print(f"tree_level:{step}, exec_time:{max_time}")
             SUM_TIME += max_time
             father_nodes_list += temp_father_nodes_list
         return SUM_TIME
@@ -44,4 +44,5 @@ class broadcast_emulator():
     def standard_mode(self):
         pass
 
-
+emulator = broadcast_emulator(["h2", "h3", "h4", "h5"],"h1",1)
+print("SUM TIME:", emulator.tree_sync_mode())

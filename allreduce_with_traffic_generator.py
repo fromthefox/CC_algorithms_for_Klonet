@@ -1,4 +1,5 @@
 from traffic_generator import traffic_generator_init
+from threading import Thread
 
 class allreduce_emulator():
     def __init__(self, nodes_num, data_size, user_id="yhbian", topo_id="traffic_generator_test"):
@@ -33,7 +34,66 @@ class allreduce_emulator():
         return ring_sync_time
     
     def ring_async_mode(self, circle_topo):
-        pass
+        node_status_matrix = {
+            "h1": 1,
+            "h2": 1,
+            "h3": 1,
+            "h4": 1,
+            "h5": 1
+        }
+        node_time_dict = {
+            "h1": 0,
+            "h2": 0,
+            "h3": 0,
+            "h4": 0,
+            "h5": 0
+        }
+        # 0: waiting for data
+        # 1: ready to send
+        # 2: finished
+
+        segment_grad_size = self.data_size / len(circle_topo)
+        segment_grad_size = str(segment_grad_size) + "G"
+        
+        def reduce_send(node_id, node_num):
+            cnt = 0
+            global circle_topo
+            node_index = circle_topo.index(node_id)
+            if node_index == len(circle_topo)-1:
+                src_node = node_id
+                dst_node = circle_topo[0]
+            else:
+                src_node = node_id
+                dst_node = circle_topo[node_index+1]
+            while True:
+                if cnt == 2*(node_num - 1):
+                    break
+                global node_status_matrix
+                global node_time_dict
+                if node_status_matrix[src_node] == 1:
+                    traffic_generator = traffic_generator_init(self.user_id, self.topo_id, src_node, dst_node, segment_grad_size)
+                    send_time = traffic_generator.generate()
+                    print(f"src:{src_node}, dst:{dst_node}, time:{send_time}")
+                    node_status_matrix[src_node] = 0
+                    node_status_matrix[dst_node] = 1
+                    node_time_dict[src_node] += send_time
+                    cnt += 1
+        for i in range(len(circle_topo)):
+            exec("thread{} = Thread(target=reduce_send, args=('h{}',5))".format(i+1, i+1))
+        
+        for i in range(len(circle_topo)):
+            exec("thread{}.start()".format(i+1))
+        
+        for i in range(len(circle_topo)):
+            exec("thread{}.join()".format(i+1))
+
+        print(node_time_dict)
+        ring_async_time = 0
+        for i in node_time_dict:
+            if node_time_dict[i] > ring_async_time:
+                ring_async_time = node_time_dict
+        return ring_async_time
+
 
     def butterfly_sync_mode(self):
         pass
@@ -41,3 +101,72 @@ class allreduce_emulator():
     def tree_sync_mode(self):
         pass
 
+# a = allreduce_emulator(5, 5)
+# circle_topo = ["h1", "h2", "h3", "h4", "h5"]
+# print("SUM_TIME", a.ring_sync_mode(circle_topo=circle_topo))
+
+
+def ring_async_mode(circle_topo):
+    node_status_matrix = {
+        "h1": 1,
+        "h2": 1,
+        "h3": 1,
+        "h4": 1,
+        "h5": 1
+    }
+    node_time_dict = {
+        "h1": 0,
+        "h2": 0,
+        "h3": 0,
+        "h4": 0,
+        "h5": 0
+    }
+    # 0: waiting for data
+    # 1: ready to send
+    # 2: finished
+    # segment_grad_size = self.data_size / len(circle_topo)
+    # segment_grad_size = str(segment_grad_size) + "G"
+    segment_grad_size = "1G"
+    
+    def reduce_send(node_id, node_num):
+        cnt = 0
+        global circle_topo
+        node_index = circle_topo.index(node_id)
+        if node_index == len(circle_topo)-1:
+            src_node = node_id
+            dst_node = circle_topo[0]
+        else:
+            src_node = node_id
+            dst_node = circle_topo[node_index+1]
+        while True:
+            if cnt == 2*(node_num - 1):
+                break
+            # global node_status_matrix
+            # global node_time_dict
+            if node_status_matrix[src_node] == 1:
+                traffic_generator = traffic_generator_init("yhbian", "traffic_generator_test", src_node, dst_node, segment_grad_size)
+                send_time = traffic_generator.generate()
+                print(f"src:{src_node}, dst:{dst_node}, time:{send_time}")
+                node_status_matrix[src_node] = 0
+                node_status_matrix[dst_node] = 1
+                node_time_dict[src_node] += send_time
+                cnt += 1
+    for i in range(len(circle_topo)):
+        exec("thread{} = Thread(target=reduce_send, args=('h{}',5))".format(i+1, i+1))
+    
+    for i in range(len(circle_topo)):
+        exec("thread{}.start()".format(i+1))
+    
+    for i in range(len(circle_topo)):
+        exec("thread{}.join()".format(i+1))
+
+    # print(node_time_dict)
+    SUM_TIME = 0
+    for i in node_time_dict:
+        if node_time_dict[i] > SUM_TIME:
+            SUM_TIME = node_time_dict
+    return SUM_TIME
+
+circle_topo = ["h1", "h2", "h3", "h4", "h5"]
+a = ring_async_mode(circle_topo)
+print(a)
