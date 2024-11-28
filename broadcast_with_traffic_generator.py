@@ -43,6 +43,3 @@ class broadcast_emulator():
 
     def standard_mode(self):
         pass
-
-emulator = broadcast_emulator(["h2", "h3", "h4", "h5"],"h1",1)
-print("SUM TIME:", emulator.tree_sync_mode())
