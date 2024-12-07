@@ -2,7 +2,7 @@ import socket
 import json
 
 def astra_sim_api(config=0):
-    return 20
+    return 30
 
 def worker_node_socket(socket, ip, port):
     ip_port = (ip, port)
@@ -20,7 +20,7 @@ def worker_node_socket(socket, ip, port):
 
 def main():
     client = socket.socket()
-    worker_node_socket(socket=client, ip = "127.0.0.1", port = 8888)
+    worker_node_socket(socket=client, ip = "127.0.0.1", port = 8890)
 
 if __name__ == "__main__":
     main()

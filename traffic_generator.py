@@ -29,5 +29,5 @@ class traffic_generator_init():
         # print(response_json)
         time = response_json["simple_info"]["time"]
         return time
-a = traffic_generator_init("yhbian", "traffic_generator_test", "h1", "h2", "1G")
-print(a.generate())
+# a = traffic_generator_init("yhbian", "traffic_generator_test", "h1", "h2", "1G")
+# print(a.generate())

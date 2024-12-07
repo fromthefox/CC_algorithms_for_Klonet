@@ -5,7 +5,7 @@ def astra_sim_api(config=0):
     """
     这里写Astra-Sim的调用Api, 参数就是ini文件中给的参数, 返回值就是时间即可.
     """
-    return 30
+    return 10
 
 def worker_node_socket(socket, ip, port):
     ip_port = (ip, port)
