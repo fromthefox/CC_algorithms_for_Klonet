@@ -1,44 +1,41 @@
 import socket
+import threading
+SUM_TIME = 0
+CONNECT_NUM = 0
 
-#默认tcp方式传输
-sk=socket.socket()
-#绑定IP与端口
-ip_port=('0.0.0.0',8888)
-#绑定监听
-sk.bind(ip_port)
-#最大连接数
-sk.listen(2)
-#不断循环 接受数据
-TIME = 0
-CNT = 0
-while CNT < 2:
-    #提示信息
-    print("正在等待接收数据。。。。")
-    #接受数据  连接对象与客户端地址
-    conn, address = sk.accept()
-    #定义信息
-    print("Root Node 连接成功!")
-    msg = "连接成功"
-    #返回信息
-    #注意 python3.x以上，网络数据的发送接收都是byte类型
-    #如果发送的数据是str型，则需要编码
-    conn.send(msg.encode())
-    #不断接收客户端发来的消息
+def root_node_socket(socket, port, ip="0.0.0.0"):
+    ip_port = (ip,port)
+    socket.bind(ip_port)
+    socket.listen(1)
+    global SUM_TIME
+    global CONNECT_NUM
     while True:
-        #接收客户端消息
-        data = conn.recv(1024)
-        if data is not None:
-            print(data.decode())
-        #接收到退出指令
-            time_test = int(data.decode())
-            TIME += time_test
-            CNT += 1
-            break
-        # #处理客户端信息 本实例直接将接收到的消息重新发回去
-        # msg_input = input("请输入回送的消息：")
-        # conn.send(msg_input.encode())
-    #主动关闭连接
-    print(TIME)
-    conn.close()
-print("outtime")
-print(TIME)
+        print("等待连接...")
+        conn, address = socket.accept()
+        CONNECT_NUM += 1
+        print(f"连接{CONNECT_NUM}成功")
+        msg = f"连接编号:{CONNECT_NUM}"
+        conn.send(msg.encode())
+
+        while True:
+            data = conn.recv(1024)
+            if data is not None:
+                node_time = data.decode()
+                print(f"NODE:{CONNECT_NUM} \n SIMU_TIME: {node_time}")
+                SUM_TIME += int(node_time)
+                break
+        conn.close()
+        break
+    
+    print(SUM_TIME)
+
+def main():
+    root_socket_1 = socket.socket()
+    root_socket_2 = socket.socket()
+    thread1 = threading.Thread(target=root_node_socket,args=(root_socket_1,8888))
+    thread2 = threading.Thread(target=root_node_socket,args=(root_socket_2,8889))
+    thread1.start()
+    thread2.start()
+
+if __name__ == "__main__":
+    main()
