@@ -1,20 +1,25 @@
 import socket
 
-# 服务端为tcp方式，客户端也采用tcp方式  默认参数即为tcp
-client = socket.socket()
-# 访问的服务器的ip和端口
-ip_port = ('127.0.0.1', 8888)
-# 连接主机
-client.connect(ip_port)
-# 定义发送消息循环
-print("Worker Node 连接成功!")
-while True:
-    # 接受主机信息   每次接收缓冲区1024个字节
-    data = client.recv(1024)
-    # 打印接受的数据
-    print(data.decode())
-    msg_input = input("请输入发送的消息：")
-    # msg_input = "i have slept"
-    client.send(msg_input.encode())
-    if msg_input != None:
-        break
+
+def astra_sim_api(config=0):
+    return 30
+
+def worker_node_socket(socket, ip, port):
+    ip_port = (ip, port)
+    socket.connect(ip_port)
+    print("Worker Node 连接成功!")
+    while True:
+        data = socket.recv(1024)
+        print(data.decode())
+        # msg_input = input("请输入发送的消息: ")
+        as_simu_time = astra_sim_api()
+        socket.send(str(as_simu_time).encode())
+        if as_simu_time != None:
+            break
+
+def main():
+    client = socket.socket()
+    worker_node_socket(socket=client, ip = "127.0.0.1", port = 8889)
+
+if __name__ == "__main__":
+    main()
