@@ -2,6 +2,7 @@ import socket
 import threading
 import workload_input
 import json
+import ast
 from broadcast_with_traffic_generator import broadcast_emulator
 from allreduce_with_traffic_generator import allreduce_emulator
 
@@ -38,9 +39,12 @@ def main():
     model = config["wide_area_topo"]["model"]
     dataset = config["wide_area_topo"]["dataset"]
     dtype = config["wide_area_topo"]["dtype"]
-    nodes_num = config["wide_area_topo"]["nodes-num"]
+    nodes_num = int(config["wide_area_topo"]["nodes-num"])
     circle_topo = config["wide_area_topo"]["circle-topo"]
+    circle_topo = ast.literal_eval(circle_topo)
+
     nodes_list = config["wide_area_topo"]["nodes-list"]
+    nodes_list = ast.literal_eval(nodes_list)
     father_node = config["wide_area_topo"]["father-node"]
 
     initial_distribution_phase = config["wide_area_topo"]["initial-distribution-phase"]
@@ -51,11 +55,11 @@ def main():
     initial_distribution_phase_data_size = init_dict["model_size"] + init_dict["dataset_size"]
     gradient_convergence_phase_data_size = init_dict["model_params"] * init_dict["dtype_size"] / (1024 ** 3)
 
-    # if initial_distribution_phase:
-    #     wide_area_time += init_distribution_phase(nodes_list=nodes_list, father_node=father_node, data_size=initial_distribution_phase_data_size, user_id=user_id, topo_id=topo_id, algorithm=initial_distribution_algorithm)
+    if initial_distribution_phase:
+        wide_area_time += init_distribution_phase(nodes_list=nodes_list, father_node=father_node, data_size=initial_distribution_phase_data_size, user_id=user_id, topo_id=topo_id, algorithm=initial_distribution_algorithm)
     
-    # wide_area_time += gradient_aggregation_phase(nodes_num=nodes_num, data_size=gradient_convergence_phase_data_size, user_id=user_id, topo_id=topo_id, circle_topo=circle_topo, algorithm=gradient_convergence_algorithm)
-    
+    wide_area_time += gradient_aggregation_phase(nodes_num=nodes_num, data_size=gradient_convergence_phase_data_size, user_id=user_id, topo_id=topo_id, circle_topo=circle_topo, algorithm=gradient_convergence_algorithm)
+    print("wide_area_time:", wide_area_time)
     def root_node_socket(socket, port, ip="0.0.0.0"):
         ip_port = (ip,port)
         socket.bind(ip_port)
@@ -80,7 +84,8 @@ def main():
                     break
             conn.close()
             break
-        print(SUM_TIME)
+        print("wide_area_time: ", wide_area_time)
+        print("SUM_TIME: ", SUM_TIME)
 
 # ---
     # thread_cnt = 0

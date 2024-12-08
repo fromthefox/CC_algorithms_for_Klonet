@@ -8,6 +8,7 @@ class allreduce_emulator():
         self.nodes_num = nodes_num
         self.data_size = data_size
         self.user_id = user_id
+        self.topo_id = topo_id
 
     def ring_sync_mode(self, circle_topo):
         NODES_NUM = self.nodes_num
