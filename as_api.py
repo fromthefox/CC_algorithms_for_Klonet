@@ -33,9 +33,9 @@ def read_node_ini_file(node_ini_file_path):
 def generate_node_files_for_single_node(node_data, project_output_folder_path, node_name):
     # 获取节点的数据
     # node_data is a dict
-    # and test
     node_data_for_node = node_data.get(node_name)
     # get the config for one node
+    # node_data_for_node is still a dict
     if not node_data_for_node:
         raise ValueError(f"Node {node_name} not found in provided data.")
 
@@ -58,6 +58,7 @@ def generate_node_files_for_single_node(node_data, project_output_folder_path, n
         if network_section[key] is not None and not isinstance(network_section[key], list):
             network_section[key] = [network_section[key]]
     # "topology": Ring -> "topology": ["Ring"]
+    # 为了符合输入格式
 
     # 系统部分的处理
     system_data = {}
@@ -67,7 +68,8 @@ def generate_node_files_for_single_node(node_data, project_output_folder_path, n
         "reduce-scatter-implementation", "all-to-all-implementation", "collective-optimization",
         "local-mem-bw", "boost-mode"
     ]
-    
+    # the possible_keys are maybe not necessary args when use astra-sim
+    # 
     for key in possible_keys:
         if key in node_data_for_node:
             if key in ["all-reduce-implementation", "all-gather-implementation", "reduce-scatter-implementation", "all-to-all-implementation"]:
@@ -75,6 +77,7 @@ def generate_node_files_for_single_node(node_data, project_output_folder_path, n
                 system_data[key] = [node_data_for_node[key]] if isinstance(node_data_for_node[key], str) else node_data_for_node[key]
             else:
                 system_data[key] = node_data_for_node[key]
+    # add the system_config
 
     # 创建输出文件夹
     node_output_folder_path = os.path.join(project_output_folder_path, node_name)
@@ -83,6 +86,7 @@ def generate_node_files_for_single_node(node_data, project_output_folder_path, n
     # 文件路径
     network_output_file_path = os.path.join(node_output_folder_path, 'network.yml')
     system_output_file_path = os.path.join(node_output_folder_path, 'system.json')
+    # write the dict into file as input file
 
     # 写入 network.yml 文件
     with open(network_output_file_path, 'w') as yml_file:
@@ -121,7 +125,7 @@ def generate_node_files_for_single_node(node_data, project_output_folder_path, n
     return workload_file_name, workload_file_path
 
 
-def astra_sim_api(config):
+def astra_sim_api(config):# 
     node_data = read_node_ini_file("./input.ini")
     print(node_data)
     workload_file_name, workload_file_path = generate_node_files_for_single_node(node_data, "./output/", "node1")

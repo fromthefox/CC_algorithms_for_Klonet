@@ -55,10 +55,10 @@ def main():
     initial_distribution_phase_data_size = init_dict["model_size"] + init_dict["dataset_size"]
     gradient_convergence_phase_data_size = init_dict["model_params"] * init_dict["dtype_size"] / (1024 ** 3)
 
-    if initial_distribution_phase:
-        wide_area_time += init_distribution_phase(nodes_list=nodes_list, father_node=father_node, data_size=initial_distribution_phase_data_size, user_id=user_id, topo_id=topo_id, algorithm=initial_distribution_algorithm)
+    # if initial_distribution_phase:
+    #     wide_area_time += init_distribution_phase(nodes_list=nodes_list, father_node=father_node, data_size=initial_distribution_phase_data_size, user_id=user_id, topo_id=topo_id, algorithm=initial_distribution_algorithm)
     
-    wide_area_time += gradient_aggregation_phase(nodes_num=nodes_num, data_size=gradient_convergence_phase_data_size, user_id=user_id, topo_id=topo_id, circle_topo=circle_topo, algorithm=gradient_convergence_algorithm)
+    # wide_area_time += gradient_aggregation_phase(nodes_num=nodes_num, data_size=gradient_convergence_phase_data_size, user_id=user_id, topo_id=topo_id, circle_topo=circle_topo, algorithm=gradient_convergence_algorithm)
     print("wide_area_time:", wide_area_time)
     def root_node_socket(socket, port, ip="0.0.0.0"):
         ip_port = (ip,port)
@@ -87,16 +87,7 @@ def main():
         print("wide_area_time: ", wide_area_time)
         print("SUM_TIME: ", SUM_TIME)
 
-# ---
-    # thread_cnt = 0
-    # while thread_cnt < nodes_num:
-    #     root_socket_1 = socket.socket()
-    #     root_socket_2 = socket.socket()
-    #     thread1 = threading.Thread(target=root_node_socket,args=(root_socket_1,8888))
-    #     thread2 = threading.Thread(target=root_node_socket,args=(root_socket_2,8889))
-    #     thread1.start()
-    #     thread2.start()
-# ---
+
     for i in range(int(nodes_num)):
         exec('root_socket_{}=socket.socket()'.format(i))
         exec('thread{}=threading.Thread(target=root_node_socket,args=(root_socket_{},{}))'.format(i, i, 8888+i))
