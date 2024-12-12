@@ -92,7 +92,7 @@ def main():
 
     for i in range(int(nodes_num)):
         exec('root_socket_{}=socket.socket()'.format(i))
-        exec('thread{}=threading.Thread(target=root_node_socket,args=(root_socket_{},{}))'.format(i, i, 8888+i))
+        exec('thread{}=threading.Thread(target=root_node_socket,args=(root_socket_{},{}))'.format(i, i, 8900+i))
         exec('thread{}.start()'.format(i))
 
 
