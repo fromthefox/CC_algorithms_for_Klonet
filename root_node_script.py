@@ -67,10 +67,10 @@ def main():
         global SUM_CIRCLE
         global CONNECT_NUM
         while True:
-            print("等待连接...")
+            print("waiting connection...")
             conn, address = socket.accept()
             CONNECT_NUM += 1
-            print(f"连接{CONNECT_NUM}成功")
+            print(f"successfully connect to {CONNECT_NUM}!")
             section_data = {key: config["node1"][key] for key in config["node1"]}
             json_data = json.dumps(section_data, indent=4)
             conn.send(json_data.encode())
@@ -103,4 +103,5 @@ def main():
 
 if __name__ == "__main__":
     FINAL_TIME = main()
-    print(f"整体训练时间为: {FINAL_TIME}")
+    print(f"SUM TIME: {FINAL_TIME}")
+    
