@@ -64,7 +64,7 @@ def main():
         ip_port = (ip,port)
         socket.bind(ip_port)
         socket.listen(1)
-        global SUM_TIME
+        global SUM_CIRCLE
         global CONNECT_NUM
         while True:
             print("等待连接...")
@@ -78,14 +78,16 @@ def main():
             while True:
                 data = conn.recv(1024)
                 if data is not None:
-                    node_time = data.decode()
-                    print(f"NODE:{CONNECT_NUM} \n SIMU_TIME: {node_time}")
-                    SUM_TIME += int(node_time)
+                    simu_info_json = data.decode()
+                    simu_info_dict = json.loads(simu_info_json)
+                    simu_circle = simu_info_dict.get("time_info")
+                    print(f"NODE:{CONNECT_NUM} \n SIMU_CIRCLE: {simu_circle}")
+                    SUM_CIRCLE += int(simu_circle)
                     break
             conn.close()
             break
         print("wide_area_time: ", wide_area_time)
-        print("SUM_TIME: ", SUM_TIME)
+        print("SUM_CIRCLE: ", SUM_CIRCLE)
 
 
     for i in range(int(nodes_num)):
