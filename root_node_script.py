@@ -7,7 +7,7 @@ from broadcast_with_traffic_generator import broadcast_emulator
 from allreduce_with_traffic_generator import allreduce_emulator
 
 
-SUM_TIME = 0
+SUM_CIRCLE = 0
 CONNECT_NUM = 0
 
 
@@ -96,9 +96,9 @@ def main():
         exec('thread{}.start()'.format(i))
 
 
-    global SUM_TIME
-    SUM_TIME += wide_area_time
-    FINAL_TIME = SUM_TIME
+    global SUM_CIRCLE
+    SUM_CIRCLE += wide_area_time
+    FINAL_TIME = SUM_CIRCLE
     return FINAL_TIME
 
 if __name__ == "__main__":
