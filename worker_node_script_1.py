@@ -192,7 +192,7 @@ def worker_node_socket(socket, ip, port):
         time_info = process_res_log(workload_file_path)
 
         resend_msg_dict = {
-            # "grad_size": grad_size,
+            "grad_size": grad_size,
             "time_info": time_info
         }
         resend_msg_json = json.dumps(resend_msg_dict)
@@ -203,7 +203,7 @@ def worker_node_socket(socket, ip, port):
 
 def main():
     client = socket.socket()
-    worker_node_socket(socket=client, ip = "192.168.1.1", port = 8888)
+    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9000)
 
 if __name__ == "__main__":
     main()

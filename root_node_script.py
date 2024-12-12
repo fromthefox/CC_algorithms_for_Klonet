@@ -43,6 +43,10 @@ def main():
     circle_topo = config["wide_area_topo"]["circle-topo"]
     circle_topo = ast.literal_eval(circle_topo)
 
+    port_list = config["wide_area_topo"]["port-list"]
+    port_list = ast.literal_eval(port_list)
+
+
     nodes_list = config["wide_area_topo"]["nodes-list"]
     nodes_list = ast.literal_eval(nodes_list)
     father_node = config["wide_area_topo"]["father-node"]
@@ -81,7 +85,9 @@ def main():
                     simu_info_json = data.decode()
                     simu_info_dict = json.loads(simu_info_json)
                     simu_circle = simu_info_dict.get("time_info")
+                    grad_size = simu_info_dict.get("grad_size")
                     print(f"NODE:{CONNECT_NUM} \n SIMU_CIRCLE: {simu_circle}")
+                    print(f"GRAD_SIZE:{grad_size}")
                     SUM_CIRCLE += int(simu_circle)
                     break
             conn.close()
@@ -92,16 +98,18 @@ def main():
 
     for i in range(int(nodes_num)):
         exec('root_socket_{}=socket.socket()'.format(i))
-        exec('thread{}=threading.Thread(target=root_node_socket,args=(root_socket_{},{}))'.format(i, i, 8900+i))
+        exec('thread{}=threading.Thread(target=root_node_socket,args=(root_socket_{},{}))'.format(i, i, int(port_list[i])))
         exec('thread{}.start()'.format(i))
 
 
     global SUM_CIRCLE
-    SUM_CIRCLE += wide_area_time
-    FINAL_TIME = SUM_CIRCLE
-    return FINAL_TIME
+    FINAL_RES = {
+        "SUM_CIRCLE": SUM_CIRCLE, 
+        "WIDE_AREA_TIME": wide_area_time
+    }
+    return FINAL_RES
 
 if __name__ == "__main__":
-    FINAL_TIME = main()
-    print(f"SUM TIME: {FINAL_TIME}")
+    FINAL_RES = main()
+    print(FINAL_RES)
     
