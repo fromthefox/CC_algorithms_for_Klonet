@@ -60,11 +60,16 @@ def initial_distribution_phase_emulation(server_config):
     return initial_phase_time
         
 
-def download_config_to_root(root_config):
+def download_config_to_root(download_config, config_file_path, node_name, dst_path):
     """
     调用as中的api
     """
-    pass
+    container_ip = download_config["ip"]
+    container_port = download_config["port"]
+    container_user = download_config["user"]
+    container_topo = download_config["topo"]
+    upload_file_to_container(container_ip, container_port, container_user, container_topo, node_name, config_file_path, dst_path)    
+
 
 def exec_root_cmd(cmd_manager, cmd_dict):
     """
@@ -87,6 +92,7 @@ def exec_worker_cmd(cmd_manager, cmd_dict):
 def recv_from_worker():
     """
     worker node将仿真的结果返回给server
+    问一下@ZCY是否有合适的api
     """
     pass
 

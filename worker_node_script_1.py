@@ -27,8 +27,8 @@ def converte_workload(workload_file_name):
 
 def exec_as(workload_file_name):
 
-    command = f'cd /app/astra-sim/tests/text && bash run.sh {workload_file_name}  > ./output_log/{workload_file_name}.log'
-    workload_file_path = f"/app/astra-sim/tests/text/output_log/{workload_file_name}.log"
+    command = f'cd /app/astra-sim/tests/text && bash run.sh {workload_file_name} > ./output_log/{workload_file_name}.log'
+    workload_file_path = "/app/astra-sim/tests/text//output_log/{workload_file_name}.log"
     # 使用subprocess.Popen()执行复合命令
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
@@ -52,8 +52,7 @@ def process_res_log(workload_file_path):
         pattern = r"sys\[\d+\] finished, (\d+) cycles"
         matches = re.findall(pattern, log_contents)
         time_info = matches[-1] if matches else None
-        print(time_info)
-        return time_info
+    return time_info
 
 
 def get_grad(workload_file_name):
@@ -161,19 +160,12 @@ def generate_node_files_for_single_node(node_data_for_node, project_output_folde
                 print(f"Warning: Workload file {workload_file_path} does not exist.")
                 workload_file_path = None
         else:
-            workload_file_path = None
             converte_workload(workload_file_name)
     else:
         workload_file_path = None
     
     return workload_file_name, workload_file_path
 
-
-def astra_sim_api(config=0):
-    """
-    这里写Astra-Sim的调用Api, 参数就是ini文件中给的参数, 返回值就是时间即可.
-    """
-    return 10
 
 def worker_node_socket(socket, ip, port):
     ip_port = (ip, port)
@@ -187,23 +179,28 @@ def worker_node_socket(socket, ip, port):
         # workload_file_name: DLRM_HybridParallel
         # workload_file_path: None
         workload_file_path = exec_as(workload_file_name)
-        print(workload_file_path)
         grad_size = get_grad(workload_file_name)
         time_info = process_res_log(workload_file_path)
 
-        resend_msg_dict = {
+        resend_server_msg_dict = {
             "grad_size": grad_size,
             "time_info": time_info
         }
-        resend_msg_json = json.dumps(resend_msg_dict)
+        resend_root_msg = "SUCCESSFULLY RUN ASTRA-SIM!"
 
-        socket.send(resend_msg_json.encode())
-        if resend_msg_json != None:
+        socket.send(resend_root_msg.encode())
+        # -----增加将resend_server_msg_dict返回给server的code-----
+
+
+
+        # -----END-----
+
+        if resend_root_msg != None:
             break
 
 def main():
     client = socket.socket()
-    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9000)
+    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9001)
 
 if __name__ == "__main__":
     main()

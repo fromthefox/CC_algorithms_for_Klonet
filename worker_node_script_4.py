@@ -167,12 +167,6 @@ def generate_node_files_for_single_node(node_data_for_node, project_output_folde
     return workload_file_name, workload_file_path
 
 
-def astra_sim_api(config=0):
-    """
-    这里写Astra-Sim的调用Api, 参数就是ini文件中给的参数, 返回值就是时间即可.
-    """
-    return 10
-
 def worker_node_socket(socket, ip, port):
     ip_port = (ip, port)
     socket.connect(ip_port)
@@ -188,19 +182,25 @@ def worker_node_socket(socket, ip, port):
         grad_size = get_grad(workload_file_name)
         time_info = process_res_log(workload_file_path)
 
-        resend_msg_dict = {
+        resend_server_msg_dict = {
             "grad_size": grad_size,
             "time_info": time_info
         }
-        resend_msg_json = json.dumps(resend_msg_dict)
+        resend_root_msg = "SUCCESSFULLY RUN ASTRA-SIM!"
 
-        socket.send(resend_msg_json.encode())
-        if resend_msg_json != None:
+        socket.send(resend_root_msg.encode())
+        # -----增加将resend_server_msg_dict返回给server的code-----
+
+
+
+        # -----END-----
+
+        if resend_root_msg != None:
             break
 
 def main():
     client = socket.socket()
-    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9003)
+    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9004)
 
 if __name__ == "__main__":
     main()

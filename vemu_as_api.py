@@ -14,5 +14,5 @@ def upload_file_to_container(ip, port, user, topo, node_name, file_path, destina
     with open(file_path, "rb") as f:
         file = {"file": f}
         resp = requests.post(url=url, data=payload, files=file)
-        #print(f"Response status code for {node_name}: {resp.status_code}")
+        print(f"Response status code for {node_name}: {resp.status_code}")
 
