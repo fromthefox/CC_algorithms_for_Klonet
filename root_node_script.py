@@ -6,29 +6,10 @@ import ast
 from broadcast_with_traffic_generator import broadcast_emulator
 from allreduce_with_traffic_generator import allreduce_emulator
 
-
 CONNECT_NUM = 0
 
-
-def init_distribution_phase(nodes_list, father_node, data_size, user_id, topo_id,  algorithm="tree_sync_mode"):
-    init_distribution_emulator = broadcast_emulator(nodes_list, father_node, data_size, user_id, topo_id)
-    if algorithm == "tree_sync_mode":
-        init_time = init_distribution_emulator.tree_sync_mode()
-        return init_time
-
-def gradient_aggregation_phase(nodes_num, data_size, user_id, topo_id, circle_topo, algorithm="ring_sync_mode"):
-    gradient_aggregation_emulator = allreduce_emulator(nodes_num, data_size, user_id, topo_id)
-    if algorithm == "ring_sync_mode":
-        aggregation_time = gradient_aggregation_emulator.ring_sync_mode(circle_topo)
-        return aggregation_time
-        
-
-
-
-
 def main():
-
-    wide_area_time = 0
+    
     path = "./input.ini"
 
     config = workload_input.config_ini(path)

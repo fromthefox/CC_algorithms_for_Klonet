@@ -16,14 +16,14 @@ def converte_workload(workload_file_name):
     stdout, stderr = process.communicate()
 
     # 打印输出和错误
-    print('stdout:', stdout)
-    print('stderr:', stderr)
+    # print('stdout:', stdout)
+    # print('stderr:', stderr)
 
     # 检查返回码
-    if process.returncode == 0:
-        print("Command executed successfully.")
-    else:
-        print("Command failed with return code:", process.returncode)
+    # if process.returncode == 0:
+    #     print("Command executed successfully.")
+    # else:
+    #     print("Command failed with return code:", process.returncode)
 
 def exec_as(workload_file_name):
 
@@ -36,14 +36,14 @@ def exec_as(workload_file_name):
     stdout, stderr = process.communicate()
 
     # 打印输出和错误
-    print('stdout:', stdout)
-    print('stderr:', stderr)
+    # print('stdout:', stdout)
+    # print('stderr:', stderr)
 
     # 检查返回码
-    if process.returncode == 0:
-        print("Command executed successfully.")
-    else:
-        print("Command failed with return code:", process.returncode)
+    # if process.returncode == 0:
+    #     print("Command executed successfully.")
+    # else:
+    #     print("Command failed with return code:", process.returncode)
     return workload_file_path
 
 def process_res_log(workload_file_path):
@@ -66,16 +66,16 @@ def get_grad(workload_file_name):
     stdout, stderr = process.communicate()
 
     # 打印输出和错误
-    print('stdout:', stdout)
-    print('stderr:', stderr)
+    # print('stdout:', stdout)
+    # print('stderr:', stderr)
 
     # 检查返回码
-    if process.returncode == 0:
-        print("Command executed successfully.")
-        return stdout
-    else:
-        print("Command failed with return code:", process.returncode)
-        return stderr
+    # if process.returncode == 0:
+    #     print("Command executed successfully.")
+    #     return stdout
+    # else:
+    #     print("Command failed with return code:", process.returncode)
+    #     return stderr
 
 def generate_node_files_for_single_node(node_data_for_node, project_output_folder_path, node_name):
     # 获取节点的数据
@@ -144,7 +144,7 @@ def generate_node_files_for_single_node(node_data_for_node, project_output_folde
     with open(system_output_file_path, 'w') as json_file:
         json.dump(system_data, json_file, indent=2)
 
-    print(f"Files for node have been generated successfully!")
+    # print(f"Files for node have been generated successfully!")
 
     # 处理 workload 文件
     workload_file_name = node_data_for_node.get('workload')  # 获取工作负载文件名
@@ -155,9 +155,10 @@ def generate_node_files_for_single_node(node_data_for_node, project_output_folde
             workload_file_name = os.path.splitext(workload_file_name)[0]
             # 检查文件是否存在
             if os.path.exists(workload_file_path):
-                print(f"Workload file found: {workload_file_path}")
+                # print(f"Workload file found: {workload_file_path}")
+                pass
             else:
-                print(f"Warning: Workload file {workload_file_path} does not exist.")
+                # print(f"Warning: Workload file {workload_file_path} does not exist.")
                 workload_file_path = None
         else:
             converte_workload(workload_file_name)
@@ -170,7 +171,7 @@ def generate_node_files_for_single_node(node_data_for_node, project_output_folde
 def worker_node_socket(socket, ip, port):
     ip_port = (ip, port)
     socket.connect(ip_port)
-    print("Worker Node 连接成功!")
+    # print("Worker Node 连接成功!")
     while True:
         data = socket.recv(1024).decode()
         data_dict = json.loads(data)
@@ -190,9 +191,7 @@ def worker_node_socket(socket, ip, port):
 
         socket.send(resend_root_msg.encode())
         # -----增加将resend_server_msg_dict返回给server的code-----
-
-
-
+        print(resend_server_msg_dict)
         # -----END-----
 
         if resend_root_msg != None:
@@ -200,7 +199,7 @@ def worker_node_socket(socket, ip, port):
 
 def main():
     client = socket.socket()
-    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9001)
+    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9000)
 
 if __name__ == "__main__":
     main()

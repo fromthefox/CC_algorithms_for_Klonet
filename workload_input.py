@@ -7,6 +7,9 @@ def config_ini(path):
     return config
 
 def model_ini(model, dataset, weight_dtype):
+    """
+    model_ini是我们预备的模型, 可以供用户模拟初始分发过程
+    """
     model_size_dict = {
         "llama-3-8B": 16.07
     }
