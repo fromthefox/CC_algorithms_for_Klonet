@@ -142,15 +142,15 @@ def main():
     cmd_manager = CmdManager(user_id, topo_id, backend_ip, backend_port)
 
     root_cmd_dict = {
-        "h1": ["python3 root_node_script.py"]
+        "h5": ["python3 root_node_script.py"]
     }
     root_exec_res = exec_root_cmd(cmd_manager, root_cmd_dict)
 
     worker_cmd_dict = {
-        "h2": ["python3 worker_node_script_1.py"],
-        "h3": ["python3 worker_node_script_2.py"],
-        "h4": ["python3 worker_node_script_3.py"],
-        "h5": ["python3 worker_node_script_4.py"],
+        "h1": ["python3 worker_node_script_1.py"],
+        "h2": ["python3 worker_node_script_2.py"],
+        "h3": ["python3 worker_node_script_3.py"],
+        "h4": ["python3 worker_node_script_4.py"],
     }
     worker_exec_res = exec_worker_cmd(cmd_manager, worker_cmd_dict)
     # 在root node和worker node执行脚本
