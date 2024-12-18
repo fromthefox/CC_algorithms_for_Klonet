@@ -10,7 +10,7 @@ CONNECT_NUM = 0
 
 def main():
     
-    path = "./input.ini"
+    path = "/as_exec_file/Multi-DataCenter-Test-for-Klonet/input.ini"
 
     config = workload_input.config_ini(path)
 
