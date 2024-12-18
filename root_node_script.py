@@ -24,7 +24,7 @@ def main():
     nodes_list = ast.literal_eval(nodes_list)
 
     # 从ini文件中提取信息
-
+    
     def root_node_socket(socket, port, ip="0.0.0.0"):
         ip_port = (ip,port)
         socket.bind(ip_port)
@@ -59,6 +59,7 @@ def main():
 
 
     return "ROOT NODE SUCCESSFULLY EXECUTE!"
+    
 
 if __name__ == "__main__":
     FINAL_RES = main()
