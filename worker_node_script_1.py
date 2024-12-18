@@ -28,7 +28,7 @@ def converte_workload(workload_file_name):
 def exec_as(workload_file_name):
 
     command = f'cd /app/astra-sim/tests/text && bash run.sh {workload_file_name} > ./output_log/{workload_file_name}.log'
-    workload_file_path = "/app/astra-sim/tests/text//output_log/{workload_file_name}.log"
+    workload_file_path = f"/app/astra-sim/tests/text/output_log/{workload_file_name}.log"
     # 使用subprocess.Popen()执行复合命令
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
@@ -76,6 +76,7 @@ def get_grad(workload_file_name):
     # else:
     #     print("Command failed with return code:", process.returncode)
     #     return stderr
+    return stdout
 
 def generate_node_files_for_single_node(node_data_for_node, project_output_folder_path, node_name):
     # 获取节点的数据
@@ -148,6 +149,7 @@ def generate_node_files_for_single_node(node_data_for_node, project_output_folde
 
     # 处理 workload 文件
     workload_file_name = node_data_for_node.get('workload')  # 获取工作负载文件名
+    workload_file_path = None
     if workload_file_name:
         # 判断工作负载文件是否是txt文件
         if workload_file_name.endswith('.txt'):
@@ -175,10 +177,10 @@ def worker_node_socket(socket, ip, port):
     while True:
         data = socket.recv(1024).decode()
         data_dict = json.loads(data)
-
         workload_file_name, workload_file_path = generate_node_files_for_single_node(data_dict, "./output/", "node")
         # workload_file_name: DLRM_HybridParallel
         # workload_file_path: None
+        # print(workload_file_path)
         workload_file_path = exec_as(workload_file_name)
         grad_size = get_grad(workload_file_name)
         time_info = process_res_log(workload_file_path)
@@ -199,7 +201,7 @@ def worker_node_socket(socket, ip, port):
 
 def main():
     client = socket.socket()
-    worker_node_socket(socket=client, ip = "192.168.1.1", port = 9000)
+    worker_node_socket(socket=client, ip = "192.168.1.5", port = 9000)
 
 if __name__ == "__main__":
     main()

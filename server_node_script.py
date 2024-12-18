@@ -65,7 +65,7 @@ def initial_distribution_phase_emulation(server_config):
     return initial_phase_time
         
 
-def download_config_to_root(server_config, config_file_path="./input.ini", dst_path="/"):
+def download_config_to_root(server_config, config_file_path="./input.ini", dst_path="/as_exec_file/"):
     """
     调用as中的api
     """
@@ -119,10 +119,18 @@ def grad_aggregation_phase_emulation(server_config, grad_size):
     return grad_aggregation_phase_time
 
 def extract_exec_res(worker_exec_res):
-    as_info = json.dumps(worker_exec_res["h2"]["0_python3 worker_node_script_1.py"]["output"])
-    grad_size = as_info.get("grad_size")
-    simu_circle = as_info.get("time_info")
-    return grad_size, simu_circle
+    grad_list = []
+    time_list = []
+    # print(type(worker_exec_res))
+    for index, node in enumerate(worker_exec_res):
+        print(node, type(node))
+        node_exec_res = node[f"h{index+1}"][f"0_python3 /as_exec_file/worker_node_script_{index+1}.py"]["output"]
+        node_exec_dict = eval(node_exec_res)
+        grad_size = int(node_exec_dict["grad_size"])
+        time_info = int(node_exec_dict["time_info"])
+        grad_list.append(grad_size)
+        time_list.append(time_info)
+    return grad_list, time_list
 
 def main():
     server_config = read_ini_config()
@@ -134,38 +142,38 @@ def main():
     backend_port = int(server_config["backend_port"])
     # user层面配置文件
     
-    initial_phase_time = initial_distribution_phase_emulation(server_config)
+    # initial_phase_time = initial_distribution_phase_emulation(server_config)
 
-    download_config_to_root()
+    # download_config_to_root(server_config)
     # 从server将ini文件下发到root node
     
     cmd_manager = CmdManager(user_id, topo_id, backend_ip, backend_port)
 
     root_cmd_dict = {
-        "h5": ["python3 root_node_script.py"]
+        "h5": ["python3 /as_exec_file/Multi-DataCenter-Test-for-Klonet/root_node_script.py"]
     }
     root_exec_res = exec_root_cmd(cmd_manager, root_cmd_dict)
-
+    print(root_exec_res)
     worker_cmd_dict = {
-        "h1": ["python3 worker_node_script_1.py"],
-        "h2": ["python3 worker_node_script_2.py"],
-        "h3": ["python3 worker_node_script_3.py"],
-        "h4": ["python3 worker_node_script_4.py"],
+        "h1": ["python3 /as_exec_file/worker_node_script_1.py"],
+        "h2": ["python3 /as_exec_file/worker_node_script_2.py"],
+        "h3": ["python3 /as_exec_file/worker_node_script_3.py"],
+        "h4": ["python3 /as_exec_file/worker_node_script_4.py"],
     }
     worker_exec_res = exec_worker_cmd(cmd_manager, worker_cmd_dict)
     # 在root node和worker node执行脚本
-
-
-    grad_size, simu_circle = extract_exec_res(worker_exec_res)
-    grad_size = grad_size / (1024 ** 3)
+    print(worker_exec_res)
+    grad_list, time_list = extract_exec_res(worker_exec_res)
+    # grad_size = grad_size / (1024 ** 3)
     # Bytes -> GBytes
-
-    phase_grad_aggregation_time = grad_aggregation_phase_emulation(server_config, grad_size)
+    print("grad_list:", grad_list)
+    print("time_list:", time_list)
+    # phase_grad_aggregation_time = grad_aggregation_phase_emulation(server_config, grad_size)
     
-    COMM_emulation_time = initial_phase_time + phase_grad_aggregation_time
+    # COMM_emulation_time = initial_phase_time + phase_grad_aggregation_time
     COMP_simulation_circle = simu_circle
     # sum_time = phase_initial_distribution_time + phase_comp_simulation_info + phase_grad_aggregation_time
-    print(f"COMM_emulation_time:{COMM_emulation_time} \n COMP_simulation_circle:{COMP_simulation_circle}")
+    # print(f"COMM_emulation_time:{COMM_emulation_time} \n COMP_simulation_circle:{COMP_simulation_circle}")
 
 
 if __name__ == "__main__":

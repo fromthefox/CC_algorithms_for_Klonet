@@ -10,12 +10,12 @@ CONNECT_NUM = 0
 
 def main():
     
-    path = "./input.ini"
+    path = "/as_exec_file/Multi-DataCenter-Test-for-Klonet/input.ini"
 
     config = workload_input.config_ini(path)
+    print(config)
 
-
-    port_list = config["wide_area_topo"]["port-list"]
+    port_list = config["wide-area-topo"]["port-list"]
     port_list = ast.literal_eval(port_list)
 
     nodes_num = config["server-control"]["nodes-num"]
