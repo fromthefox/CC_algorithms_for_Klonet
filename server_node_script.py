@@ -121,15 +121,14 @@ def grad_aggregation_phase_emulation(server_config, grad_size):
 def extract_exec_res(worker_exec_res):
     grad_list = []
     time_list = []
-    # print(type(worker_exec_res))
-    for index, node in enumerate(worker_exec_res):
-        print(node, type(node))
-        node_exec_res = node[f"h{index+1}"][f"0_python3 /as_exec_file/worker_node_script_{index+1}.py"]["output"]
-        node_exec_dict = eval(node_exec_res)
-        grad_size = int(node_exec_dict["grad_size"])
-        time_info = int(node_exec_dict["time_info"])
-        grad_list.append(grad_size)
-        time_list.append(time_info)
+
+    worker_exec_res_dict = ast.literal_eval(worker_exec_res)
+    for index in range(len(worker_exec_res_dict)):
+        node_exec_res = worker_exec_res_dict[f"h{index+1}"][f"0_python3 /as_exec_file/worker_node_script_{index+1}.py"]["output"]
+        print(node_exec_res)
+        node_exec_res_dict = ast.literal_eval(node_exec_res)
+        grad_list.append(int(node_exec_res_dict.get("grad_size")))
+        time_list.append(int(node_exec_res_dict.get("time_info")))
     return grad_list, time_list
 
 def main():
@@ -171,7 +170,7 @@ def main():
     # phase_grad_aggregation_time = grad_aggregation_phase_emulation(server_config, grad_size)
     
     # COMM_emulation_time = initial_phase_time + phase_grad_aggregation_time
-    COMP_simulation_circle = simu_circle
+    # COMP_simulation_circle = simu_circle
     # sum_time = phase_initial_distribution_time + phase_comp_simulation_info + phase_grad_aggregation_time
     # print(f"COMM_emulation_time:{COMM_emulation_time} \n COMP_simulation_circle:{COMP_simulation_circle}")
 
