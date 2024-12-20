@@ -122,9 +122,9 @@ def extract_exec_res(worker_exec_res):
     grad_list = []
     time_list = []
 
-    worker_exec_res_dict = ast.literal_eval(worker_exec_res)
-    for index in range(len(worker_exec_res_dict)):
-        node_exec_res = worker_exec_res_dict[f"h{index+1}"][f"0_python3 /as_exec_file/worker_node_script_{index+1}.py"]["output"]
+    # worker_exec_res_dict = ast.literal_eval(worker_exec_res)
+    for index in range(len(worker_exec_res)):
+        node_exec_res = worker_exec_res[f"h{index+1}"][f"0_python3 /as_exec_file/worker_node_script_{index+1}.py"]["output"]
         print(node_exec_res)
         node_exec_res_dict = ast.literal_eval(node_exec_res)
         grad_list.append(int(node_exec_res_dict.get("grad_size")))
