@@ -141,7 +141,7 @@ def main():
     backend_port = int(server_config["backend_port"])
     # user层面配置文件
     
-    # initial_phase_time = initial_distribution_phase_emulation(server_config)
+    initial_phase_time = initial_distribution_phase_emulation(server_config)
 
     # download_config_to_root(server_config)
     # 从server将ini文件下发到root node
@@ -167,12 +167,13 @@ def main():
     # Bytes -> GBytes
     print("grad_list:", grad_list)
     print("time_list:", time_list)
-    # phase_grad_aggregation_time = grad_aggregation_phase_emulation(server_config, grad_size)
+    grad_size = grad_list[0] / (1024 ** 3)
+    phase_grad_aggregation_time = grad_aggregation_phase_emulation(server_config, grad_size)
     
-    # COMM_emulation_time = initial_phase_time + phase_grad_aggregation_time
-    # COMP_simulation_circle = simu_circle
+    COMM_emulation_time = initial_phase_time + phase_grad_aggregation_time
+    COMP_simulation_circle = max(time_list)
     # sum_time = phase_initial_distribution_time + phase_comp_simulation_info + phase_grad_aggregation_time
-    # print(f"COMM_emulation_time:{COMM_emulation_time} \n COMP_simulation_circle:{COMP_simulation_circle}")
+    print(f"COMM_emulation_time:{COMM_emulation_time} \n COMP_simulation_circle:{COMP_simulation_circle}")
 
 
 if __name__ == "__main__":
