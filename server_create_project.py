@@ -1,4 +1,4 @@
-from vempu_api import *
+from vemu_api import *
 
 if __name__ == "__main__":
 
@@ -63,32 +63,32 @@ if __name__ == "__main__":
         "frontend! Sleep 20s...")
     
 
-    src_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="100"
+    src_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="100",
         link="l1", ne="h1")
     dst_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="100",
         link="l1", ne="s1")
     link_manager.config_link(src_link_config, dst_link_config)
 
 
-    src_link_config = LinkConfiguration(bw_kbps="5000000", delay_us="150"
+    src_link_config = LinkConfiguration(bw_kbps="5000000", delay_us="150",
         link="l2", ne="h2")
     dst_link_config = LinkConfiguration(bw_kbps="5000000", delay_us="150",
         link="l2", ne="s1")
     link_manager.config_link(src_link_config, dst_link_config)
 
-    src_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="0"
+    src_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="0",
         link="l3", ne="h3")
     dst_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="0",
         link="l3", ne="s1")
     link_manager.config_link(src_link_config, dst_link_config)
 
-    src_link_config = LinkConfiguration(bw_kbps="15000000", delay_us="100"
+    src_link_config = LinkConfiguration(bw_kbps="15000000", delay_us="100",
         link="l4", ne="h4")
     dst_link_config = LinkConfiguration(bw_kbps="15000000", delay_us="100",
         link="l4", ne="s1")
     link_manager.config_link(src_link_config, dst_link_config)
 
-    src_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="250"
+    src_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="250",
         link="l5", ne="h5")
     dst_link_config = LinkConfiguration(bw_kbps="10000000", delay_us="250",
         link="l5", ne="s1")
