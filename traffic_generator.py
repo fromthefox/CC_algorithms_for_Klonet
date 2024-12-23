@@ -1,8 +1,8 @@
 import requests
 
 class traffic_generator_init():
-    def __init__(self, user_id, topo_id, src_node, dst_node, data_size, CONFIG = {}, url = "http://kb310server.x3322.net:10441/master/traffic_gen/"):
-        # 'http://192.168.1.33:25888/master/traffic_gen/'
+    def __init__(self, user_id, topo_id, src_node, dst_node, data_size, CONFIG = {}, url = "http://192.168.1.46:25888/master/traffic_gen/"):
+        # 'http://192.168.1.46:25888/master/traffic_gen/'
         # "http://kb310server.x3322.net:10441/master/traffic_gen/"
         self.user_id = user_id
         self.topo_id = topo_id
@@ -29,5 +29,6 @@ class traffic_generator_init():
         print(response_json)
         time = response_json["simple_info"]["time"]
         return time
-# a = traffic_generator_init("yhbian", "traffic_generator_test", "h1", "h2", "1G")
-# print(a.generate())
+a = traffic_generator_init("yhbian", "Multi_DataCenter_Experiment_2", "h1", "h2", "1G")
+print(a.generate())
+# Multi_DataCenter_Experiment_2
