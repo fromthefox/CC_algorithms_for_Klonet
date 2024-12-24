@@ -8,7 +8,7 @@ import ast
 from vemu_as_api import upload_file_to_container
 from vemu_api import *
 import json
-
+import time
 
 def read_ini_config(ini_path="./input.ini"):
     """
@@ -145,7 +145,7 @@ def main():
 
     # download_config_to_root(server_config)
     # 从server将ini文件下发到root node
-    
+    time.sleep(10)
     cmd_manager = CmdManager(user_id, topo_id, backend_ip, backend_port)
 
     root_cmd_dict = {
