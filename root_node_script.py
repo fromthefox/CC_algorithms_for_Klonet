@@ -3,8 +3,6 @@ import threading
 import workload_input
 import json
 import ast
-from broadcast_with_traffic_generator import broadcast_emulator
-from allreduce_with_traffic_generator import allreduce_emulator
 
 CONNECT_NUM = 0
 
